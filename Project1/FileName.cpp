@@ -13,10 +13,7 @@ struct{
 	vector<float> cost = {100,200};
 } services;
 
-struct mainttype{
-	string type;
-	vector<string> description;
-};
+
 
 
 
@@ -28,8 +25,8 @@ float updateTaxRate();
 
 
 int main() {
-	//services_edit();
-	updateTaxRate();
+	services_edit();
+	//updateTaxRate();
 }
 
 void services_edit(){
@@ -68,7 +65,7 @@ void services_edit(){
 				cout << services.cost[i] << endl;
 			}
 			cout << "______________________________\n";
-			
+			cout << "Successfully Added!!" << endl;
 		}
 		else if (answer == "update")
 		{
@@ -82,33 +79,38 @@ void services_edit(){
 			}
 			cout << "______________________________\n";
 			cout << "Choose a service to edit by its name:\n";
-			cin >>answer;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');    // Clear the input buffer
+			getline(cin,answer);
 
 			for (int i = 0; i < services.names.size(); i++)
 			{
 				float cost_update;
-				if (answer == services.names[i])
+				if (answer == services.names[0])
 				{
+
 					cout << "Enter the new cost for "+services.names[i]<<endl;
 					cin >> cost_update;
-					services.cost[i] = cost_update;	
+					services.cost[i] = cost_update;	//update the cost
 
+					cout << "______________________________\n";
+					cout << "Name\t\t\t" << "Cost" << endl;
+					cout << "------------------------------\n";
 					for (int i = 0; i < services.names.size(); i++)
 					{
 						cout << i + 1 << ". " << services.names[i] << "\t\t";
 						cout << services.cost[i] << endl;
 					}
+					cout << "Successfully Updated!!" << endl;
 					break;
 
+				}
+				else
+				{
+					cout << "This service does not exist!!..Try another one"<<endl;
 				}
 			}
 
 		}
-		else
-		{
-			break;
-		}
-
 	} while (answer != "exit");
 }
 
