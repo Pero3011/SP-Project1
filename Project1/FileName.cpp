@@ -12,17 +12,12 @@ struct services_struct{
 	float cost;
 };
 
-struct maintenance {
-	string partName;
-	string serviceName;
-};
-
 struct maintenanceSchedule {
 	string model;
 	int year;
 	int mileage;
 	int months;
-	vector<maintenance> maintenances;
+	string partName[5];
 };
 
 vector<services_struct> services;
@@ -31,6 +26,21 @@ vector<maintenanceSchedule> schedule;
 //Admin Functions Declaration
 
 void services_edit();
+void display_services();
+void schedule_edit();
+void display_schedule(int x);
+float updateTaxRate();
+
+
+
+
+int main() {
+
+	//services_edit();
+	//updateTaxRate();
+	schedule_edit();
+}
+
 void display_services()
 {
 	cout << "______________________________\n";
@@ -43,40 +53,29 @@ void display_services()
 	}
 	cout << "______________________________\n";
 }
-void schedule_edit(string model, int year, int mileage, int months, vector<maintenance>schedule);
-void display_schedule()
+
+void display_schedule(int x)
 {
 	cout << "--------------------------------------------------------------------\n";
 	cout << "Model\t\t" << "year\t\t" << "Mileage/months\t\t" << "Maintenance" << endl;
 	cout << "--------------------------------------------------------------------\n";
+
 	for (int i = 0; i < schedule.size(); i++)
 	{
-		cout << schedule[i].model<<"\t\t\t";
+		cout << schedule[i].model << "\t\t";
 
-		cout << schedule[i].year<<"\t\t\t";
+		cout << schedule[i].year << "\t\t";
 
-		cout << schedule[i].mileage<<" / "<< schedule[i].months<<"\t\t\t";
+		cout << schedule[i].mileage << " / " << schedule[i].months << "\t\t";
 
-		for (int j = 0; j < schedule[i].maintenances.size(); j++)
+		for (int j = 0; j < x; j++)
 		{
-			cout << "Parts:" << endl<<" ";
-			cin >> schedule[i].maintenances[j].partName;
-			cout << "Services:" << endl << " ";
-			cin >> schedule[i].maintenances[j].serviceName;
+			cout << j+1<<"." << schedule[i].partName[j] <<" "<< endl;
+
 		}
+
 	}
-
-}
-float updateTaxRate();
-
-
-
-
-int main() {
-
-	//services_edit();
-	//updateTaxRate();
-	schedule_edit();
+	
 }
 
 void services_edit(){
@@ -158,39 +157,53 @@ float updateTaxRate()
 	return taxRate;
 }
 
-void schedule_edit(string model, int year, int mileage, int months,vector<maintenance>schedule)
+void schedule_edit()
 {
 	cout << "<--- Welcome to Maintenance Schedule --->" << endl;
 	string answer;
 	do
 	{
+       
 		cout << "Add Maintenance or update the schedule:" << endl;
 		cin >> answer;
 
+
 		if (answer == "add")
 		{
-				cout << "Enter the car model:" << endl;
-				cin >> model;
-				cout << "Enter the model year:" << endl;
-				cin >> year;
-				cout << "Enter the mileage of the car:" << endl;
-				cin >> mileage;
-				cout << "per(/) ";
-				cin >> months;
+			string model, partname, servicename;
+			int year, mileage, months;
 
-				//display_parts();
-				cout << "Enter the name of the parts:"<<endl;
-				cin >> schedule[i].maintenances[j].partName;
+			cout << "Enter the car model: ";
+			cin >> model;
+			cout << "Enter the model year: ";
+			cin >> year;
+			cout << "Enter the mileage of the car: ";
+			cin >> mileage;
+			cout << "per(/) ";
+			cin >> months;
 
-				display_services();
-				cout << "Enter the services name:" << endl;
-				cin >> schedule[i].maintenances[j].serviceName;
+			schedule.push_back({ model,year,mileage,months});
 
-				schedule.push_back({model,year,mileage,months,{}})
+			int partscounter;
+			cout << "How many parts do you want to add: ";
+			cin >> partscounter;
 
-			display_schedule();
-			
+			for (int j = 0; j < schedule.size(); j++)
+			{
+				for (int i = 0; i < partscounter; i++)
+				{
+					cin >> partname;
+					schedule[j].partName[i] = partname;
+				}
+			}
+
+
+
+
+
+
+			display_schedule(partscounter);
 		}
-
 	} while (answer!="exit");
+
 }
