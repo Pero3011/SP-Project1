@@ -200,7 +200,68 @@ void schedule_edit()
 		}
 		else if(answer=="update")
 		{
+			cout << "What do you want to update the service or parts: ";
+			cin >> answer;
 
+			if (answer == "parts")
+			{
+				for (auto& s : schedule)
+				{
+					cout << "Parts:\n";
+					for (auto& part : s.partNames)
+					{
+						cout << " - " << part << endl;
+					}
+				}
+
+				cout << "Choose the part you want to edit by its name: ";
+				cin >> answer;
+
+				for (auto& s : schedule)
+				{
+					for (auto& part : s.partNames)
+					{
+						if (answer == part)
+						{
+							string partname;
+							cout << "Enter the name of the new part: ";
+							cin >> partname;
+							part = partname;
+						}
+					}
+				}
+				display_schedule();
+			}
+			else if (answer == "service")
+			{
+				for (auto& s : schedule)
+				{
+					cout << "Services:\n";
+					for (auto& service : s.serviceNames)
+					{
+						cout << " - " << service << endl;
+					}
+				}
+
+				cout << "Choose the service you want to edit by its name: ";
+				cin >> answer;
+
+				for (auto& s : schedule)
+				{
+					for (auto& service : s.serviceNames)
+					{
+						if (answer == service)
+						{
+							string servicename;
+							cout << "Enter the name of the new service: ";
+							cin >> servicename;
+							service = servicename;
+						}
+					}
+				}
+				display_schedule();
+
+			}
 		}
 	} while (answer!="exit");
 
