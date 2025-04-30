@@ -12,23 +12,24 @@ struct services_struct{
 	float cost;
 };
 
-struct maintenanceSchedule {
+struct Schedule {
 	string model;
 	int year;
 	int mileage;
 	int months;
-	string partName[5];
+	vector<string> partNames; // Dynamic list of parts
+	vector<string> serviceNames; //Dynamic list of services
 };
 
 vector<services_struct> services;
-vector<maintenanceSchedule> schedule;
+vector<Schedule> schedule;
 
 //Admin Functions Declaration
 
 void services_edit();
 void display_services();
 void schedule_edit();
-void display_schedule(int x);
+void display_schedule();
 float updateTaxRate();
 
 
@@ -54,28 +55,22 @@ void display_services()
 	cout << "______________________________\n";
 }
 
-void display_schedule(int x)
-{
-	cout << "--------------------------------------------------------------------\n";
-	cout << "Model\t\t" << "year\t\t" << "Mileage/months\t\t" << "Maintenance" << endl;
-	cout << "--------------------------------------------------------------------\n";
-
-	for (int i = 0; i < schedule.size(); i++)
-	{
-		cout << schedule[i].model << "\t\t";
-
-		cout << schedule[i].year << "\t\t";
-
-		cout << schedule[i].mileage << " / " << schedule[i].months << "\t\t";
-
-		for (int j = 0; j < x; j++)
-		{
-			cout << j+1<<"." << schedule[i].partName[j] <<" "<< endl;
-
+void display_schedule() {
+	cout << "\n--- Maintenance Schedule ---\n";
+	for (auto& s : schedule) {
+		cout << "Model: " << s.model <<endl<< "Year: " << s.year<<endl
+			<< "Mileage: " << s.mileage << " per " << s.months << " months\n";
+		cout << "Parts:\n";
+		for (auto& part : s.partNames) {
+			cout << " - " << part << endl;
 		}
-
+		cout << endl;
+		cout << "Services:\n";
+		for (auto& service : s.serviceNames) {
+			cout << " - " << service << endl;
+		}
+		cout << endl;
 	}
-	
 }
 
 void services_edit(){
@@ -164,45 +159,48 @@ void schedule_edit()
 	do
 	{
        
-		cout << "Add Maintenance or update the schedule:" << endl;
+		cout << "\nType 'add' to add maintenance,or 'update' to update existing maintenance, or 'exit' to quit: ";
 		cin >> answer;
 
-
-		if (answer == "add")
-		{
-			string model, partname, servicename;
-			int year, mileage, months;
-
+		if (answer == "add") {
+			Schedule newEntry;
 			cout << "Enter the car model: ";
-			cin >> model;
+			cin >> newEntry.model;
 			cout << "Enter the model year: ";
-			cin >> year;
+			cin >> newEntry.year;
 			cout << "Enter the mileage of the car: ";
-			cin >> mileage;
-			cout << "per(/) ";
-			cin >> months;
-
-			schedule.push_back({ model,year,mileage,months});
+			cin >> newEntry.mileage;
+			cout << "Enter maintenance interval (in months): ";
+			cin >> newEntry.months;
 
 			int partscounter;
-			cout << "How many parts do you want to add: ";
+			cout << "How many parts do you want to add? ";
 			cin >> partscounter;
 
-			for (int j = 0; j < schedule.size(); j++)
-			{
-				for (int i = 0; i < partscounter; i++)
-				{
-					cin >> partname;
-					schedule[j].partName[i] = partname;
-				}
+			string partname;
+			for (int i = 0; i < partscounter; i++) {
+				cout << "Enter part name #" << i + 1 << ": ";
+				cin >> partname;
+				newEntry.partNames.push_back(partname);
 			}
 
+			int servicecounter;
+			cout << "How many services do you want to add? ";
+			cin >> servicecounter;
 
+			string servicename;
+			for (int i = 0; i < servicecounter; i++) {
+				cout << "Enter service name #" << i + 1 << ": ";
+				cin >> servicename;
+				newEntry.serviceNames.push_back(servicename);
+			}
 
+			schedule.push_back(newEntry); // Add to global schedule
+			display_schedule();
+		}
+		else if(answer=="update")
+		{
 
-
-
-			display_schedule(partscounter);
 		}
 	} while (answer!="exit");
 
